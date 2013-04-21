@@ -1,9 +1,13 @@
-#include <Time.h>  
+/*
+ * tickleBand3 
+ * A standalone OZ prototye testing triggers at certain time of the day
+ * Set the hour of a trigger using the trigger hours
+ */
 
+#include <Time.h>  
 #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by Unix time_t as ten ASCII digits
 #define TIME_HEADER  'T'   // Header tag for serial time sync message
 #define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
-#define NUM_TRIGGERS 4
 
 // set pin numbers
 const int buttonPin = 2;
@@ -17,6 +21,7 @@ long debounceDelay = 50;    // the debounce time; increase if the output flicker
 
 // T1262347200  //noon Jan 1 2010
 // Trigger hours
+#define NUM_TRIGGERS 4
 int TriggerHours[] = {9,12,18,24};
 
 void setup()  {
@@ -26,10 +31,6 @@ void setup()  {
 
 void loop(){  
   int reading = digitalRead(buttonPin);
-
-  // check to see if you just pressed the button 
-  // (i.e. the input went from LOW to HIGH),  and you've waited 
-  // long enough since the last press to ignore any noise:  
 
   // If the switch changed, due to noise or pressing:
   if (reading != lastButtonState) {
@@ -66,11 +67,12 @@ void loop(){
       triggerTickle(); 
     }
   }
-    delay(100);
+  Serial.println(numberPresses);
+  delay(100);
 }
 
 void triggerTickle(){
-  
+  //TODO: Implement based on the actuator being used
 }
 
 void digitalClockDisplay(){
