@@ -11,13 +11,14 @@
 
 // set pin numbers
 const int buttonPin = 2;
+const int ticklePin = 6;
 
 int buttonState = 0;
 int lastButtonState = LOW;
 int numberPresses = 0;
 
 long lastDebounceTime = 0;  // the last time the output pin was toggled
-long debounceDelay = 50;    // the debounce time; increase if the output flickers
+long debounceDelay = 500;    // the debounce time; increase if the output flickers
 
 // T1262347200  //noon Jan 1 2010
 // Trigger hours
@@ -27,6 +28,8 @@ int TriggerHours[] = {9,12,18,24};
 void setup()  {
   Serial.begin(9600);
   pinMode(buttonPin, INPUT);
+  pinMode(ticklePin, OUTPUT);
+  digitalWrite(buttonPin, LOW); 
 }
 
 void loop(){  
@@ -35,18 +38,11 @@ void loop(){
   // If the switch changed, due to noise or pressing:
   if (reading != lastButtonState) {
     // reset the debouncing timer
-    lastDebounceTime = millis();
+    if(reading == HIGH){
+      numberPresses++; 
+    }
   } 
-  
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    // whatever the reading is at, it's been there for longer
-    // than the debounce delay, so take it as the actual current state:
-    buttonState = reading;
-  }
-  
-  if(buttonState == HIGH){
-    numberPresses++;
-  }
+    
   // save the reading.  Next time through the loop,
   // it'll be the lastButtonState:
   lastButtonState = reading;
@@ -55,7 +51,7 @@ void loop(){
     processSyncMessage();
   }
   if(timeStatus() == timeNotSet) 
-    Serial.println("waiting for sync message");
+    Serial.println("w");
   else{
     boolean trigger = false;
     for(int i = 0; i< NUM_TRIGGERS; i++){
@@ -67,12 +63,19 @@ void loop(){
       triggerTickle(); 
     }
   }
-  Serial.println(numberPresses);
+  stopTickle();
+  Serial.println(String(hour()) + " h");
+  Serial.println(String(numberPresses) + " p");
   delay(100);
+
 }
 
 void triggerTickle(){
-  //TODO: Implement based on the actuator being used
+  digitalWrite(ticklePin, HIGH);
+}
+
+void stopTickle(){
+  digitalWrite(ticklePin, LOW); 
 }
 
 void digitalClockDisplay(){
