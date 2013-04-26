@@ -28,9 +28,11 @@ void setup()
 
 void draw()
 {
-  if ( myPort.available() > 0) {  // If data is available,
-    val = myPort.read();         // read it and store it in val
-    myPort1.write(val);
+  if(myPort.available() > 0) {  // If data is available,         // read it and store it in val
+    myPort1.write(myPort.read());
+  }
+  if(myPort1.available() > 0){
+    myPort.write(myPort1.read()); 
   }
   background(255);             // Set background to white
   if (val == 0) {              // If the serial value is 0,
@@ -40,7 +42,7 @@ void draw()
     fill(204);                 // set fill to light gray
   }
   rect(50, 50, 100, 100);
-  delay(100);
+  delay(10);
 }
 
 
