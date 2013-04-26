@@ -8,17 +8,13 @@
 #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by Unix time_t as ten ASCII digits
 #define TIME_HEADER  'T'   // Header tag for serial time sync message
 #define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
-
 // set pin numbers
-const int buttonPin = 2;
+const int buttonPins[] = {A3, A1};
 const int ticklePin = 6;
+const int numInputs = 2;
 
-int buttonState = 0;
-int lastButtonState = LOW;
 int numberPresses = 0;
-
-long lastDebounceTime = 0;  // the last time the output pin was toggled
-long debounceDelay = 500;    // the debounce time; increase if the output flickers
+int lastButtonState[numInputs];
 
 // T1262347200  //noon Jan 1 2010
 // Trigger hours
@@ -27,25 +23,31 @@ int TriggerHours[] = {9,12,18,24};
 
 void setup()  {
   Serial.begin(9600);
-  pinMode(buttonPin, INPUT);
+  for(int i=0; i<numInputs; i++){
+     pinMode(buttonPins[i], INPUT); 
+     digitalWrite(buttonPins[i], HIGH); 
+     lastButtonState[i] = LOW;
+  }
   pinMode(ticklePin, OUTPUT);
-  digitalWrite(buttonPin, LOW); 
 }
 
 void loop(){  
-  int reading = digitalRead(buttonPin);
-
-  // If the switch changed, due to noise or pressing:
-  if (reading != lastButtonState) {
-    // reset the debouncing timer
-    if(reading == HIGH){
-      numberPresses++; 
-    }
-  } 
-    
-  // save the reading.  Next time through the loop,
-  // it'll be the lastButtonState:
-  lastButtonState = reading;
+  int reading[numInputs];
+  
+  
+  for(int i = 0; i < numInputs; i++){
+    reading[i] = digitalRead(buttonPins[i]); 
+    // If the switch changed, due to noise or pressing:
+    if (reading[i] != lastButtonState[i]) {
+      // reset the debouncing timer
+      if(reading[i] == HIGH){
+        numberPresses++; 
+      }
+    } 
+    // save the reading.  Next time through the loop,
+    // it'll be the lastButtonState:
+    lastButtonState[i] = reading[i];
+  }
   if(Serial.available() ) 
   {
     processSyncMessage();
