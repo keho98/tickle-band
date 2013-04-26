@@ -11,7 +11,8 @@
 #define TIME_HEADER  'T'   // Header tag for serial time sync message
 #define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
 // set pin numbers
-const int buttonPins[] = {A3, A1};
+const int buttonPins[] = {
+  A3, A1};
 const int numInputs = 2;
 const int servoPin0 = 8;
 const int servoPin1 = 9;
@@ -28,14 +29,15 @@ int lastButtonState[numInputs];
 // T1262347200  //noon Jan 1 2010
 // Trigger hours
 #define NUM_TRIGGERS 4
-int TriggerHours[] = {9,12,18,24};
+int TriggerHours[] = {
+  9,12,18,24};
 
 void setup()  {
   Serial.begin(9600);
   for(int i=0; i<numInputs; i++){
-     pinMode(buttonPins[i], INPUT); 
-     digitalWrite(buttonPins[i], HIGH); 
-     lastButtonState[i] = LOW;
+    pinMode(buttonPins[i], INPUT); 
+    digitalWrite(buttonPins[i], HIGH); 
+    lastButtonState[i] = LOW;
   }
   servo0.attach(servoPin0);
   servo1.attach(servoPin1);
@@ -139,3 +141,4 @@ void processSyncMessage() {
     }  
   }
 }
+
