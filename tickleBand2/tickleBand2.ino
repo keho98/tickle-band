@@ -5,9 +5,9 @@ const int buttonPins[] = {A3, A1};
 const int numInputs = 2;
 
 char incomingByte = 0;
-boolean DEBUG = false;
 
 int led = 13;
+int lastButtonState[numInputs];
 
 void setup() 
 {
@@ -29,7 +29,6 @@ void loop()
     if (reading[i] != lastButtonState[i]) {
       // reset the debouncing timer
       if(reading[i] == HIGH){
-        numberPresses++; 
         sendTickle();
       }
     } 
@@ -41,7 +40,7 @@ void loop()
     // read the incoming byte:
     incomingByte = Serial.read();
     // say what you got:
-    triggerTickle()
+    triggerTickle();
     digitalWrite(led,HIGH);
   }
   else{
