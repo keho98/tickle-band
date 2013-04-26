@@ -86,13 +86,13 @@ void triggerTickle(){
   {                                  // in steps of 1 degree 
     servo0.write(pos0);
     servo1.write(pos1);    // tell servo to go to position in variable 'pos' 
-    delay(15);                       // waits 15ms for the servo to reach the position 
+    delay(10);                       // waits 15ms for the servo to reach the position 
   } 
   for(pos0 = 180; pos0>=1; pos0-=1)     // goes from 180 degrees to 0 degrees 
   {                                
     servo0.write(pos0); 
     servo1.write(pos1);    // tell servo to go to position in variable 'pos' 
-    delay(15);                       // waits 15ms for the servo to reach the position 
+    delay(10);                       // waits 15ms for the servo to reach the position 
   } 
 }
 
