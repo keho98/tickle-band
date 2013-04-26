@@ -9,6 +9,17 @@ char incomingByte = 0;
 int led = 13;
 int lastButtonState[numInputs];
 
+/****servo variables ***/
+const int servoPin0 = 8;
+const int servoPin1 = 9;
+
+Servo servo0;
+Servo servo1;
+
+int pos0 = 0;
+int pos1 = 0;
+
+
 void setup() 
 {
   Serial.begin(9600);
@@ -17,6 +28,8 @@ void setup()
      digitalWrite(buttonPins[i], HIGH); 
      lastButtonState[i] = LOW;
   }
+  servo0.attach(servoPin0);
+  servo1.attach(servoPin1);
   pinMode(led,OUTPUT);
 }
 
@@ -51,7 +64,18 @@ void loop()
 }
 
 void triggerTickle(){
-  
+  for(pos0 = 0; pos0 < 180; pos0 += 1)  // goes from 0 degrees to 180 degrees 
+  {                                  // in steps of 1 degree 
+    servo0.write(pos0);
+    servo1.write(pos0);    // tell servo to go to position in variable 'pos' 
+    delay(10);                       // waits 15ms for the servo to reach the position 
+  } 
+  for(pos0 = 180; pos0>=1; pos0-=1)     // goes from 180 degrees to 0 degrees 
+  {                                
+    servo0.write(pos0); 
+    servo1.write(pos0);    // tell servo to go to position in variable 'pos' 
+    delay(10);                       // waits 15ms for the servo to reach the position 
+  } 
 }
 
 void sendTickle(){
