@@ -9,6 +9,9 @@
 
 import processing.serial.*;
 
+final int port0 = 6;
+final int port1 = 4;
+
 Serial myPort;  // Create object from Serial class
 Serial myPort1;
 int val;      // Data received from the serial port
@@ -20,8 +23,8 @@ void setup()
   // is always my  FTDI adaptor, so I open Serial.list()[0].
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
-  String portName = Serial.list()[6];
-  String portName1 = Serial.list()[4];
+  String portName = Serial.list()[port0];
+  String portName1 = Serial.list()[port1];
   myPort = new Serial(this, portName, 9600);
   myPort1 = new Serial(this,portName1, 9600);
 }
