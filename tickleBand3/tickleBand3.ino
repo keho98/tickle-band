@@ -15,13 +15,14 @@ const int buttonPins[] = {
   A3, A1};
 const int numInputs = 2;
 const int servoPin0 = 8;
-const int servoPin1 = 9;
+const int servoPin1 = 6; 
 
 Servo servo0;
 Servo servo1;
 
 int pos0 = 0;
 int pos1 = 0;
+int led = 13;
 
 int numberPresses = 0;
 int lastButtonState[numInputs];
@@ -30,7 +31,7 @@ int lastButtonState[numInputs];
 // Trigger hours
 #define NUM_TRIGGERS 4
 int TriggerHours[] = {
-  9,12,18,24};
+  9,12,14,18,24};
 
 void setup()  {
   Serial.begin(9600);
@@ -39,8 +40,7 @@ void setup()  {
     digitalWrite(buttonPins[i], HIGH); 
     lastButtonState[i] = LOW;
   }
-  servo0.attach(servoPin0);
-  servo1.attach(servoPin1);
+  pinMode(led, OUTPUT);
 }
 
 void loop(){  
@@ -68,7 +68,7 @@ void loop(){
   else{
     boolean trigger = false;
     for(int i = 0; i< NUM_TRIGGERS; i++){
-      if(hour() == TriggerHours[i]){
+      if(hour() == TriggerHours[i] && minute() % 5 == 0 && second() == 15){
         trigger = true; 
       }
     }
@@ -84,6 +84,9 @@ void loop(){
 }
 
 void triggerTickle(){
+  if(DEBUG) digitalWrite(led, HIGH);
+  servo0.attach(servoPin0);
+  servo1.attach(servoPin1);
   for(pos0 = 0; pos0 < 180; pos0 += 1)  // goes from 0 degrees to 180 degrees 
   {                                  // in steps of 1 degree 
     servo0.write(pos0);
@@ -99,7 +102,9 @@ void triggerTickle(){
 }
 
 void stopTickle(){
-
+  servo0.detach();
+  servo1.detach();
+  if(DEBUG) digitalWrite(led, LOW);
 }
 
 void digitalClockDisplay(){
