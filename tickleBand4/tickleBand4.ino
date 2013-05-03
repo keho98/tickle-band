@@ -66,7 +66,7 @@ void loop(){
   else{
     boolean trigger = false;
     for(int i = 0; i< NUM_TRIGGERS; i++){
-      if(hour() == TriggerHours[i] && minute() % 5 == 0 && second() == 15){
+      if(hour() == TriggerHours[i] && minute() == 30 && second() == 15){
         trigger = true; 
       }
     }
