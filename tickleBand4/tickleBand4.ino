@@ -1,7 +1,7 @@
 /*
- * tickleBand3 
+ * tickleBand4
  * A standalone OZ prototye testing triggers at certain time of the day
- * Set the hour of a trigger using the trigger hours
+ * Hard code the time manually, then give power to the clock.
  */
 
 #include <Time.h> 
@@ -40,6 +40,8 @@ void setup()  {
     digitalWrite(buttonPins[i], HIGH); 
     lastButtonState[i] = LOW;
   }
+  //Set time HERE
+  setTime(12,15,0,5,5,2013);
   pinMode(led, OUTPUT);
 }
 
@@ -58,10 +60,6 @@ void loop(){
     // save the reading.  Next time through the loop,
     // it'll be the lastButtonState:
     lastButtonState[i] = reading[i];
-  }
-  if(Serial.available() && timeStatus() == timeNotSet) 
-  {
-    processSyncMessage();
   }
   if(timeStatus() == timeNotSet) 
     Serial.println("w");
@@ -106,44 +104,3 @@ void stopTickle(){
   servo1.detach();
   if(DEBUG) digitalWrite(led, LOW);
 }
-
-void digitalClockDisplay(){
-  // digital clock display of the time
-  Serial.print(hour());
-  printDigits(minute());
-  printDigits(second());
-  Serial.print(" ");
-  Serial.print(day());
-  Serial.print(" ");
-  Serial.print(month());
-  Serial.print(" ");
-  Serial.print(year()); 
-  Serial.println(); 
-}
-
-void printDigits(int digits){
-  // utility function for digital clock display: prints preceding colon and leading 0
-  Serial.print(":");
-  if(digits < 10)
-    Serial.print('0');
-  Serial.print(digits);
-}
-
-void processSyncMessage() {
-  // if time sync available from serial port, update time and return true
-  while(Serial.available() >=  TIME_MSG_LEN ){  // time message consists of header & 10 ASCII digits
-    char c = Serial.read() ; 
-    Serial.print(c);  
-    if( c == TIME_HEADER ) {       
-      time_t pctime = 0;
-      for(int i=0; i < TIME_MSG_LEN -1; i++){   
-        c = Serial.read();          
-        if( c >= '0' && c <= '9'){   
-          pctime = (10 * pctime) + (c - '0') ; // convert digits to a number    
-        }
-      }   
-      setTime(pctime);   // Sync Arduino clock to the time received on the serial port
-    }  
-  }
-}
-
