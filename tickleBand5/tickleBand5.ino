@@ -40,6 +40,7 @@ void setup()  {
     lastButtonState[i] = LOW;
   }
   //Set time HERE
+  //setTime(hr,min,sec,day,month,yr);
   setTime(12,15,0,5,5,2013);
   pinMode(led, OUTPUT);
 }
