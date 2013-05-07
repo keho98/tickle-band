@@ -29,10 +29,12 @@ int lastButtonState[numInputs];
 
 // T1262347200  //noon Jan 1 2010
 // Trigger hours
-#define NUM_TRIGGERS 4
-int TriggerHours[] = {12,14,15,19};
+#define NUM_TRIGGERS 6
+int TriggerHours[] = {9,12,18,19,20,23};
 
 void setup()  {
+//  ADCSRA = 0;
+//  PRR = B10010101;
   Serial.begin(57600);
   for(int i=0; i<numInputs; i++){
     pinMode(buttonPins[i], INPUT); 
@@ -41,7 +43,7 @@ void setup()  {
   }
   //Set time HERE
   //setTime(hr,min,sec,day,month,yr);
-  setTime(12,15,0,5,5,2013);
+  setTime(18,29,0,5,5,2013);
   pinMode(led, OUTPUT);
 }
 
@@ -68,7 +70,7 @@ void loop(){
   else{
     boolean trigger = false;
     for(int i = 0; i< NUM_TRIGGERS; i++){
-      if(hour() == TriggerHours[i] && second() <= 5){
+      if(hour() == TriggerHours[i] && minute() == 30 && second() <= 5){
         trigger = true; 
       }
     }
@@ -85,7 +87,7 @@ void loop(){
   }
   Serial.println(String(hour()) + " h");
   Serial.println(String(numberPresses) + " p");
-  delay(50);
+  delay(1000);
 }
 
 //void triggerTickle(){

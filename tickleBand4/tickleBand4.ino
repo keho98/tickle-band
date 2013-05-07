@@ -34,6 +34,8 @@ int TriggerHours[] = {
   9,12,14,15,18,24};
 
 void setup()  {
+  ADCSRA = 0;
+  PRR = B10010101;
   Serial.begin(9600);
   for(int i=0; i<numInputs; i++){
     pinMode(buttonPins[i], INPUT); 
@@ -67,7 +69,7 @@ void loop(){
   else{
     boolean trigger = false;
     for(int i = 0; i< NUM_TRIGGERS; i++){
-      if(hour() == TriggerHours[i] && minute() == 30 && second() == 15){
+      if(hour() == TriggerHours[i] && second() == 15){
         trigger = true; 
       }
     }
