@@ -10,7 +10,7 @@
 import processing.serial.*;
 
 final int port0 = 6;
-final int port1 = 4;
+final int port1 = 8;
 
 Serial myPort;  // Create object from Serial class
 Serial myPort1;
@@ -26,7 +26,7 @@ void setup()
   println(Serial.list());
   String portName = Serial.list()[port0];
   String portName1 = Serial.list()[port1];
-  myPort = new Serial(this, portName, 9600);
+  myPort = new Serial(this, portName, 57600);
   myPort1 = new Serial(this,portName1, 57600);
 }
 
@@ -34,11 +34,15 @@ void draw()
 {
   if(myPort.available() > 0) {  // If data is available,         // read it and store it in val
     println("Reading from 2");
-    myPort1.write(myPort.read());
+    char tmp = char(myPort.read());
+    println(tmp);
+    myPort1.write(tmp);
   }
   if(myPort1.available() > 0){
     println("Reading from 1");
-    myPort.write(myPort1.read()); 
+    char tmp = char(myPort1.read());
+    println(tmp);
+    myPort.write(tmp); 
   }
   background(255);             // Set background to white
   if (val == 0) {              // If the serial value is 0,
