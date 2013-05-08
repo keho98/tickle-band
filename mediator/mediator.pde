@@ -23,18 +23,21 @@ void setup()
   // is always my  FTDI adaptor, so I open Serial.list()[0].
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
+  println(Serial.list());
   String portName = Serial.list()[port0];
   String portName1 = Serial.list()[port1];
   myPort = new Serial(this, portName, 9600);
-  myPort1 = new Serial(this,portName1, 9600);
+  myPort1 = new Serial(this,portName1, 57600);
 }
 
 void draw()
 {
   if(myPort.available() > 0) {  // If data is available,         // read it and store it in val
+    println("Reading from 2");
     myPort1.write(myPort.read());
   }
   if(myPort1.available() > 0){
+    println("Reading from 1");
     myPort.write(myPort1.read()); 
   }
   background(255);             // Set background to white

@@ -81,12 +81,12 @@ void loop(){
   stopTickle();
   if(Serial.available() > 0){
     Serial.read();
-    Serial.println("w");
+    if(DEBUG) Serial.println("w");
     triggerTickle();
     stopTickle();
   }
-  Serial.println(String(hour()) + " h");
-  Serial.println(String(numberPresses) + " p");
+  if(DEBUG) Serial.println(String(hour()) + " h");
+  if(DEBUG) Serial.println(String(numberPresses) + " p");
   delay(1000);
 }
 
@@ -109,18 +109,18 @@ void loop(){
 //}
 
 void triggerTickle(){
-  if(DEBUG) digitalWrite(led, HIGH);
+  digitalWrite(led, HIGH);
   servo0.attach(servoPin0);
   servo1.attach(servoPin1);
   servo0.writeMicroseconds(800);
-  delay(2000);
+  delay(1000);
   servo0.writeMicroseconds(2200);
 }
 
 void stopTickle(){
   servo0.writeMicroseconds(1500);
-  delay(2000);
+  delay(1000);
   servo0.detach();
   servo1.detach();
-  if(DEBUG) digitalWrite(led, LOW);
+  digitalWrite(led, LOW);
 }
