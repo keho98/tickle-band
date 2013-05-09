@@ -10,7 +10,7 @@
 import processing.serial.*;
 
 final int port0 = 6;
-final int port1 = 8;
+final int port1 = 4;
 
 Serial myPort;  // Create object from Serial class
 Serial myPort1;
