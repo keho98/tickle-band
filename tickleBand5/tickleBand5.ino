@@ -16,6 +16,7 @@ const int buttonPins[] = {
 const int numInputs = 2;
 const int servoPin0 = 8;
 const int servoPin1 = 6; 
+const int motorPin = 3;
 
 Servo servo0;
 Servo servo1;
@@ -50,14 +51,18 @@ void setup()  {
 void loop(){  
   int reading[numInputs];
   for(int i = 0; i < numInputs; i++){
-    reading[i] = digitalRead(buttonPins[i]); 
+    reading[i] = getReading(buttonPins[i]); 
     // If the switch changed, due to noise or pressing:
     if (reading[i] != lastButtonState[i]) {
       // reset the debouncing timer
-      if(reading[i] == HIGH){
+      if(reading[i] == 'HI'){
         numberPresses++; 
-        Serial.println("t");
+        Serial.println("s");
         if(DEBUG) triggerTickle();
+      }
+      else if(reading[i] == 'MED'){
+        numberPresses++;
+        Serial.println("t");
       }
     }
     stopTickle();
@@ -88,6 +93,18 @@ void loop(){
   if(DEBUG) Serial.println(String(hour()) + " h");
   if(DEBUG) Serial.println(String(numberPresses) + " p");
   delay(1000);
+}
+
+String getReading(pin){
+   reading = analogRead(pin); 
+   ouptut = 'LOW';
+   if(reading > 500){
+     output = 'MED';
+   }
+   if(reading > 750{
+     output = 'HI';
+   }
+   return output;
 }
 
 //void triggerTickle(){
