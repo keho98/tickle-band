@@ -55,12 +55,12 @@ void loop(){
     // If the switch changed, due to noise or pressing:
     if (reading[i] != lastButtonState[i]) {
       // reset the debouncing timer
-      if(reading[i] == 'HI'){
+      if(reading[i] == 2){
         numberPresses++; 
         Serial.println("s");
         if(DEBUG) triggerTickle();
       }
-      else if(reading[i] == 'MED'){
+      else if(reading[i] == 2){
         numberPresses++;
         Serial.println("t");
       }
@@ -95,14 +95,14 @@ void loop(){
   delay(1000);
 }
 
-String getReading(pin){
-   reading = analogRead(pin); 
-   ouptut = 'LOW';
+int getReading(int pin){
+   int reading = analogRead(pin); 
+   int output = 0;
    if(reading > 500){
-     output = 'MED';
+     output = 1;
    }
-   if(reading > 750{
-     output = 'HI';
+   if(reading > 750){
+     output = 2;
    }
    return output;
 }
