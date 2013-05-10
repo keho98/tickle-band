@@ -6,7 +6,7 @@
 
 #include <Time.h> 
 #include <Servo.h> 
-#define DEBUG true
+#define DEBUG false
 #define TIME_MSG_LEN  11   // time sync to PC is HEADER followed by Unix time_t as ten ASCII digits
 #define TIME_HEADER  'T'   // Header tag for serial time sync message
 #define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
@@ -30,7 +30,7 @@ int lastButtonState[numInputs];
 
 // T1262347200  //noon Jan 1 2010
 // Trigger hours
-#define NUM_TRIGGERS 6
+#define NUM_TRIGGERS 0
 int TriggerHours[] = {9,12,18,19,20,23};
 
 void setup()  {
@@ -46,64 +46,50 @@ void setup()  {
   //setTime(hr,min,sec,day,month,yr);
   setTime(18,29,0,5,5,2013);
   pinMode(led, OUTPUT);
+  pinMode(motorPin, OUTPUT);
 }
 
 void loop(){  
   int reading[numInputs];
   for(int i = 0; i < numInputs; i++){
     reading[i] = getReading(buttonPins[i]); 
-    if(DEBUG) Serial.println(char(getReading(buttonPins[i])));
+    if(DEBUG) Serial.println(String(getReading(buttonPins[i])));
     // If the switch changed, due to noise or pressing:
     if (reading[i] != lastButtonState[i]) {
       // reset the debouncing timer
       if(reading[i] == 2){
         numberPresses++; 
         Serial.println("s");
-        if(DEBUG) triggerTickle();
       }
-      else if(reading[i] == 2){
+      else if(reading[i] == 1){
         numberPresses++;
         Serial.println("t");
         triggerVibe();
       }
     }
-    stopTickle();
     // save the reading.  Next time through the loop,
     // it'll be the lastButtonState:
     lastButtonState[i] = reading[i];
   }
-  if(timeStatus() == timeNotSet) 
-    Serial.println("w");
-  else{
-    boolean trigger = false;
-    for(int i = 0; i< NUM_TRIGGERS; i++){
-      if(hour() == TriggerHours[i] && minute() == 30 && second() <= 5){
-        trigger = true; 
-      }
-    }
-    if(trigger){
-      triggerTickle(); 
-    }
-  }
-  stopTickle();
+  analogWrite(motorPin, float(1024 - analogRead(A1))/1024*255);
   if(Serial.available() > 0){
     Serial.read();
-    if(DEBUG) Serial.println("w");
     triggerTickle();
     stopTickle();
   }
   if(DEBUG) Serial.println(String(hour()) + " h");
   if(DEBUG) Serial.println(String(numberPresses) + " p");
-  delay(1000);
+  delay(20);
 }
 
 int getReading(int pin){
    int reading = analogRead(pin); 
+   if(DEBUG) Serial.println(reading);
    int output = 0;
-   if(reading > 500){
+   if(reading < 500){
      output = 1;
    }
-   if(reading > 750){
+   if(reading < 200){
      output = 2;
    }
    return output;
