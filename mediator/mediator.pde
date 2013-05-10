@@ -9,8 +9,8 @@
 
 import processing.serial.*;
 
-final int port0 = 11;
-final int port1 = 4;
+final int port0 = 8;
+final int port1 = 10;
 
 Serial myPort;  // Create object from Serial class
 Serial myPort1;
@@ -30,19 +30,21 @@ void setup()
   myPort1 = new Serial(this,portName1, 57600);
 }
 
+void actionPerformed() { }
+
 void draw()
 {
   if(myPort.available() > 0) {  // If data is available,         // read it and store it in val
     println("Reading from 2");
     char tmp = char(myPort.read());
-    println(tmp);
-    myPort1.write(tmp);
+    myPort1.write('t');
+    delay(200);
   }
   if(myPort1.available() > 0){
     println("Reading from 1");
     char tmp = char(myPort1.read());
-    println(tmp);
-    myPort.write(tmp); 
+    //myPort.write('t'); 
+    delay(200);
   }
   background(255);             // Set background to white
   if (val == 0) {              // If the serial value is 0,
