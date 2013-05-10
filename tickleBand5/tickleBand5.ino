@@ -12,8 +12,8 @@
 #define TIME_REQUEST  7    // ASCII bell character requests a time sync message 
 // set pin numbers
 const int buttonPins[] = {
-  A3, A1};
-const int numInputs = 2;
+  A1};
+const int numInputs = 1;
 const int servoPin0 = 8;
 const int servoPin1 = 6; 
 const int motorPin = 3;
@@ -52,6 +52,7 @@ void loop(){
   int reading[numInputs];
   for(int i = 0; i < numInputs; i++){
     reading[i] = getReading(buttonPins[i]); 
+    if(DEBUG) Serial.println(char(getReading(buttonPins[i])));
     // If the switch changed, due to noise or pressing:
     if (reading[i] != lastButtonState[i]) {
       // reset the debouncing timer
@@ -63,6 +64,7 @@ void loop(){
       else if(reading[i] == 2){
         numberPresses++;
         Serial.println("t");
+        triggerVibe();
       }
     }
     stopTickle();
@@ -124,6 +126,12 @@ int getReading(int pin){
 //    delay(10);                       // waits 15ms for the servo to reach the position 
 //  } 
 //}
+
+void triggerVibe(){
+ digitalWrite(motorPin, HIGH);
+ delay(500);
+ digitalWrite(motorPin, LOW); 
+}
 
 void triggerTickle(){
   digitalWrite(led, HIGH);
