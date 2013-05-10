@@ -124,12 +124,15 @@ void triggerTickle(){
   servo0.attach(servoPin0);
   servo1.attach(servoPin1);
   servo0.writeMicroseconds(800);
+  servo1.writeMicroseconds(800);
   delay(1000);
   servo0.writeMicroseconds(2200);
+  servo1.writeMicroseconds(2200);
 }
 
 void stopTickle(){
   servo0.writeMicroseconds(1500);
+  servo1.writeMicroseconds(1500);
   delay(1000);
   servo0.detach();
   servo1.detach();
