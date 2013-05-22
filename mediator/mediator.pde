@@ -10,7 +10,7 @@
 import processing.serial.*;
 
 final int port0 = 8;
-final int port1 = 10;
+final int port1 = 6;
 
 Serial myPort;  // Create object from Serial class
 Serial myPort1;
@@ -42,7 +42,7 @@ void draw()
   }
   if(myPort1.available() > 0){
     println("Reading from 1");
-    char tmp = char(myPort1.read());
+    //char tmp = char(myPort1.read());
     //myPort.write('t'); 
     delay(200);
   }
