@@ -65,6 +65,8 @@ void loop(){
         numberPresses++;
         Serial.println("t");
         triggerVibe();
+        triggerTickle();
+        stopTickle();
       }
     }
     // save the reading.  Next time through the loop,
