@@ -14,12 +14,16 @@
 const int buttonPins[] = {
   A1};
 const int numInputs = 1;
-const int servoPin0 = 5;
-const int servoPin1 = 6; 
+const int servoPin0 = 6;
+//const int servoPin1 = 6;
+
+const int squeezePin0 = 9;
+
 const int motorPin = 3;
 
 Servo servo0;
-Servo servo1;
+Servo squeeze0;
+//Servo servo1;
 
 int pos0 = 0;
 int pos1 = 0;
@@ -36,7 +40,7 @@ int TriggerHours[] = {9,12,18,19,20,23};
 void setup()  {
 //  ADCSRA = 0;
 //  PRR = B10010101;
-  Serial.begin(57600);
+  Serial.begin(9600);
   for(int i=0; i<numInputs; i++){
     pinMode(buttonPins[i], INPUT); 
     digitalWrite(buttonPins[i], HIGH); 
@@ -60,14 +64,18 @@ void loop(){
       if(reading[i] == 2){
         numberPresses++; 
         Serial.println("s");
+        triggerSqueeze();
       }
       else if(reading[i] == 1){
         numberPresses++;
         Serial.println("t");
         triggerVibe();
         triggerTickle();
-        stopTickle();
+        //stopTickle();
       }
+    }
+    else{
+     Serial.println(""); 
     }
     // save the reading.  Next time through the loop,
     // it'll be the lastButtonState:
@@ -121,29 +129,48 @@ void triggerVibe(){
  digitalWrite(motorPin, LOW); 
 }
 
+void triggerSqueeze(){
+  squeeze0.attach(squeezePin0);
+  //servo1.attach(servoPin1);
+  for(int pos = 0; pos < 180; pos += 1)  // goes from 0 degrees to 180 degrees 
+    {                                  // in steps of 1 degree 
+      squeeze0.write(pos);    // tell servo to go to position in variable 'pos' 
+      //servo1.write(pos);
+      delay(15);                       // waits 15ms for the servo to reach the position 
+    } 
+    for(int pos = 180; pos>=1; pos-=1)     // goes from 180 degrees to 0 degrees 
+    {                                
+      squeeze0.write(pos);              // tell servo to go to position in variable 'pos' 
+      //servo1.write(pos);
+      delay(15);                       // waits 15ms for the servo to reach the position 
+    }   
+}
+
 void triggerTickle(){
   digitalWrite(led, HIGH);
   servo0.attach(servoPin0);
-  servo1.attach(servoPin1);
+  //servo1.attach(servoPin1);
   for(int pos = 0; pos < 180; pos += 1)  // goes from 0 degrees to 180 degrees 
     {                                  // in steps of 1 degree 
       servo0.write(pos);    // tell servo to go to position in variable 'pos' 
-      servo1.write(pos);
+      //servo1.write(pos);
       delay(15);                       // waits 15ms for the servo to reach the position 
     } 
     for(int pos = 180; pos>=1; pos-=1)     // goes from 180 degrees to 0 degrees 
     {                                
       servo0.write(pos);              // tell servo to go to position in variable 'pos' 
-      servo1.write(pos);
+      //servo1.write(pos);
       delay(15);                       // waits 15ms for the servo to reach the position 
     } 
+  servo0.detach();
+  digitalWrite(led,LOW);
 }
 
 void stopTickle(){
   servo0.writeMicroseconds(1500);
-  servo1.writeMicroseconds(1500);
+  //servo1.writeMicroseconds(1500);
   delay(1500);
   servo0.detach();
-  servo1.detach();
+  //servo1.detach();
   digitalWrite(led, LOW);
 }

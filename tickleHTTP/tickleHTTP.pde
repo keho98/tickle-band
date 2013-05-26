@@ -17,18 +17,19 @@ import processing.serial.*;
 
 Serial myPort;
 String data[];
-final String myBand = "1";
-final String theirBand ="2";
+final String myBand = "3";
+final String theirBand ="4";
 
 void setup() {
   println(Serial.list());
-  myPort =  new Serial(this, Serial.list()[10], 19200); //Change this line to the correct serial port
+  myPort =  new Serial(this, Serial.list()[10], 9600); //Change this line to the correct serial port
 }
 
 void draw() {
   data = loadStrings("http://tickle-node.herokuapp.com/band?id=" + myBand);
   for (int i = 0 ; i < data.length; i++) {
     myPort.write(int(data[i]));
+    print("writing");
   }
   //New data available
   if(myPort.available() > 0){

@@ -35,7 +35,7 @@ const int servoPinY = 6;
 void setup()
 { 
   //  initialize function
-  Serial.begin(19200);
+  Serial.begin(9600);
   Wire.begin();
   CapaTouch.begin();
   //Initialize servos
