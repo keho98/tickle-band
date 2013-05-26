@@ -89,7 +89,7 @@ void loop(){
   }
   if(DEBUG) Serial.println(String(hour()) + " h");
   if(DEBUG) Serial.println(String(numberPresses) + " p");
-  delay(20);
+  delay(100);
 }
 
 int getReading(int pin){
