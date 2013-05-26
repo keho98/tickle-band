@@ -42,6 +42,5 @@ void draw() {
      } 
     }
   }
-  delay(200);
 }
 

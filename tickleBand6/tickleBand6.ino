@@ -69,8 +69,8 @@ void loop(){
       else if(reading[i] == 1){
         numberPresses++;
         Serial.println("t");
-        triggerVibe();
-        triggerTickle();
+        //triggerVibe();
+        //triggerTickle();
         //stopTickle();
       }
     }
