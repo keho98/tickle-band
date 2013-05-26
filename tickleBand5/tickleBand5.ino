@@ -14,7 +14,7 @@
 const int buttonPins[] = {
   A1};
 const int numInputs = 1;
-const int servoPin0 = 8;
+const int servoPin0 = 5;
 const int servoPin1 = 6; 
 const int motorPin = 3;
 
@@ -125,17 +125,24 @@ void triggerTickle(){
   digitalWrite(led, HIGH);
   servo0.attach(servoPin0);
   servo1.attach(servoPin1);
-  servo0.writeMicroseconds(800);
-  servo1.writeMicroseconds(800);
-  delay(1000);
-  servo0.writeMicroseconds(2200);
-  servo1.writeMicroseconds(2200);
+  for(int pos = 0; pos < 180; pos += 1)  // goes from 0 degrees to 180 degrees 
+    {                                  // in steps of 1 degree 
+      servo0.write(pos);    // tell servo to go to position in variable 'pos' 
+      servo1.write(pos);
+      delay(15);                       // waits 15ms for the servo to reach the position 
+    } 
+    for(int pos = 180; pos>=1; pos-=1)     // goes from 180 degrees to 0 degrees 
+    {                                
+      servo0.write(pos);              // tell servo to go to position in variable 'pos' 
+      servo1.write(pos);
+      delay(15);                       // waits 15ms for the servo to reach the position 
+    } 
 }
 
 void stopTickle(){
   servo0.writeMicroseconds(1500);
   servo1.writeMicroseconds(1500);
-  delay(1000);
+  delay(1500);
   servo0.detach();
   servo1.detach();
   digitalWrite(led, LOW);
